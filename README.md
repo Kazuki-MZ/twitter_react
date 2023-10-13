@@ -1,1 +1,1 @@
-# twitter_react
+# RailsとReactでtwitterクローン課題。フロントエンド側
