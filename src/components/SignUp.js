@@ -27,14 +27,10 @@ const SignUp = () => {
     }));
   };
 
-  const signUpParams = {
-    ...registration,
-  };
-
   const handleSignUpSubmit = async e => {
     e.preventDefault();
     try {
-      await signUp(signUpParams);
+      await signUp(registration);
       setFlashMessage([
         "メールを送信しました。リンクからアカウント登録してください。",
       ]);
@@ -46,6 +42,28 @@ const SignUp = () => {
       setAlert(true);
     }
   };
+
+  const formList = [
+    { name: "name", type: "text", placeholder: "名前", label: "名前" },
+    {
+      name: "email",
+      type: "text",
+      placeholder: "email",
+      label: "メールアドレス",
+    },
+    {
+      name: "password",
+      type: "password",
+      placeholder: "6文字以上入力してください",
+      label: "パスワード",
+    },
+    {
+      name: "passwordConfirmation",
+      type: "password",
+      placeholder: "",
+      label: "パスワード確認",
+    },
+  ];
 
   return (
     <div
@@ -73,42 +91,18 @@ const SignUp = () => {
             新規登録
           </Card.Title>
           <Form>
-            <Form.Group style={{ marginBottom: "20px" }}>
-              <Form.Label>名前</Form.Label>
-              <Form.Control
-                name='name'
-                type='text'
-                placeholder='名前'
-                onChange={onChangeRegistration}
-              />
-            </Form.Group>
-            <Form.Group style={{ marginBottom: "20px" }}>
-              <Form.Label>メールアドレス</Form.Label>
-              <Form.Control
-                name='email'
-                type='text'
-                placeholder='email'
-                onChange={onChangeRegistration}
-              />
-            </Form.Group>
-            <Form.Group style={{ marginBottom: "20px" }}>
-              <Form.Label>パスワード</Form.Label>
-              <Form.Control
-                name='password'
-                type='text'
-                placeholder='パスワード'
-                onChange={onChangeRegistration}
-              />
-            </Form.Group>
-            <Form.Group style={{ marginBottom: "20px" }}>
-              <Form.Label>パスワード確認</Form.Label>
-              <Form.Control
-                name='passwordConfirmation'
-                type='text'
-                placeholder='パスワード確認'
-                onChange={onChangeRegistration}
-              />
-            </Form.Group>
+            {formList.map(item => (
+              <Form.Group key={item.name} style={{ marginBottom: "20px" }}>
+                <Form.Label>{item.label}</Form.Label>
+                <Form.Control
+                  name={item.name}
+                  type={item.type}
+                  placeholder={item.placeholder}
+                  onChange={onChangeRegistration}
+                />
+              </Form.Group>
+            ))}
+
             <Button
               type='submit'
               variant='primary'
