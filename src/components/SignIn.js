@@ -1,33 +1,36 @@
 import React, { useContext } from "react";
 import { useState } from "react";
-import { signUp } from "../lib/api/auth";
+import { signIn } from "../lib/api/auth";
 import Card from "react-bootstrap/Card";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import FlashMessage from "./FlashMessage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import { FlashMessageContext } from "../App";
 
-const SignUp = () => {
+const SignIn = () => {
   const { flashMessage, createFlashMessage, resetFlashMessage } =
     useContext(FlashMessageContext);
 
-  const [registration, setRegistration] = useState({
-    name: "",
+  const [session, setSession] = useState({
     email: "",
     password: "",
-    passwordConfirmation: "",
   });
 
-  const signUpParams = {
-    ...registration,
-    confirmSuccessUrl: "http://localhost:3000/api/v1/users/sign_in",
+  const navigate = useNavigate();
+
+  const TokenSetCookies = res => {
+    const authHeaderKeys = ["access-token", "client", "uid"];
+    authHeaderKeys.forEach(authHeaderKey => {
+      Cookies.set(`_${authHeaderKey}`, res.headers[authHeaderKey]);
+    });
   };
 
   const onChangeRegistration = e => {
     const { name, value } = e.target;
-    setRegistration(prevRegistration => ({
+    setSession(prevRegistration => ({
       ...prevRegistration,
       [name]: value,
     }));
@@ -36,19 +39,15 @@ const SignUp = () => {
   const handleSignUpSubmit = async e => {
     e.preventDefault();
     try {
-      await signUp(signUpParams);
-      createFlashMessage(
-        ["メールを送信しました。リンクからアカウント登録してください"],
-        "success",
-        true
-      );
+      const res = await signIn(session);
+      TokenSetCookies(res);
+      navigate("/");
     } catch (e) {
-      createFlashMessage([e.response.data.errors.fullMessages], "error", true);
+      createFlashMessage([e.response.data.errors], "error", true);
     }
   };
 
   const formList = [
-    { name: "name", type: "text", placeholder: "名前", label: "名前" },
     {
       name: "email",
       type: "text",
@@ -58,14 +57,8 @@ const SignUp = () => {
     {
       name: "password",
       type: "password",
-      placeholder: "6文字以上入力してください",
+      placeholder: "Password",
       label: "パスワード",
-    },
-    {
-      name: "passwordConfirmation",
-      type: "password",
-      placeholder: "",
-      label: "パスワード確認",
     },
   ];
 
@@ -90,7 +83,7 @@ const SignUp = () => {
               fontSize: "30px",
               fontWeight: "bold",
             }}>
-            新規登録
+            ログイン
           </Card.Title>
           <Form>
             {formList.map(item => (
@@ -113,14 +106,15 @@ const SignUp = () => {
                 type='submit'
                 variant='primary'
                 onClick={handleSignUpSubmit}>
-                新規登録する
+                ログインする
               </Button>
             </div>
+
             <Link
-              to='/api/v1/users/sign_in'
+              to='/api/v1/users'
               className='btn btn-secondary'
               onClick={resetFlashMessage}>
-              ログイン画面へ
+              新規登録画面へ
             </Link>
           </Form>
         </Card.Body>
@@ -129,4 +123,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
