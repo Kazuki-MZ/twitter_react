@@ -8,7 +8,7 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import FlashMessage from "./FlashMessage";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { FlashMessageContext } from "../App";
+import { FlashMessageContext } from "../context/FlashMessageContext";
 
 const SignIn = () => {
   const { flashMessage, createFlashMessage, resetFlashMessage } =

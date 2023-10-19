@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import FlashMessage from "./FlashMessage";
 import { Link } from "react-router-dom";
-import { FlashMessageContext } from "../App";
+import { FlashMessageContext } from "../context/FlashMessageContext";
 
 const SignUp = () => {
   const { flashMessage, createFlashMessage, resetFlashMessage } =

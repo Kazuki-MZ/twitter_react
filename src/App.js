@@ -4,39 +4,12 @@ import SignUp from "./components/SignUp";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignIn from "./components/SignIn";
 import { Home } from "./components/Home";
-import { createContext, useState } from "react";
-
-export const FlashMessageContext = createContext();
+import { FlashMessageProvider } from "./context/FlashMessageContext";
 
 function App() {
-  const [flashMessage, setFlashMessage] = useState({
-    message: [],
-    type: "",
-    open: false,
-  });
-
-  const createFlashMessage = (message, type, boolean) => {
-    setFlashMessage(prevFlashMessage => ({
-      ...prevFlashMessage,
-      message: message,
-      type: type,
-      open: boolean,
-    }));
-  };
-
-  const resetFlashMessage = () => {
-    setFlashMessage(prevFlashMessage => ({
-      ...prevFlashMessage,
-      message: "",
-      type: "",
-      open: false,
-    }));
-  };
-
   return (
     <div>
-      <FlashMessageContext.Provider
-        value={{ flashMessage, createFlashMessage, resetFlashMessage }}>
+      <FlashMessageProvider>
         <BrowserRouter>
           <Routes>
             <Route path='/api/v1/users' element={<SignUp />} />
@@ -44,7 +17,7 @@ function App() {
             <Route path='/' element={<Home />} />
           </Routes>
         </BrowserRouter>
-      </FlashMessageContext.Provider>
+      </FlashMessageProvider>
     </div>
   );
 }
