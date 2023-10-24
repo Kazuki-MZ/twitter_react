@@ -31,7 +31,7 @@ export const TweetForm = () => {
   };
 
   const tweetParams = {
-    text: text,
+    text,
     tweet_image_id: imageId ? imageId : "",
   };
 
