@@ -21,13 +21,6 @@ const SignIn = () => {
 
   const navigate = useNavigate();
 
-  const TokenSetCookies = res => {
-    const authHeaderKeys = ["access-token", "client", "uid"];
-    authHeaderKeys.forEach(authHeaderKey => {
-      Cookies.set(`_${authHeaderKey}`, res.headers[authHeaderKey]);
-    });
-  };
-
   const onChangeRegistration = e => {
     const { name, value } = e.target;
     setSession(prevRegistration => ({
@@ -40,7 +33,9 @@ const SignIn = () => {
     e.preventDefault();
     try {
       const res = await signIn(session);
-      TokenSetCookies(res);
+      Cookies.set("_access_token", res.headers["access-token"]);
+      Cookies.set("_client", res.headers["client"]);
+      Cookies.set("_uid", res.headers["uid"]);
       navigate("/");
     } catch (e) {
       createFlashMessage([e.response.data.errors], "error", true);
