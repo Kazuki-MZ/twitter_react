@@ -7,7 +7,7 @@ import { createTweet } from "../lib/api/tweet";
 import FlashMessage from "./FlashMessage";
 import { createImage } from "../lib/api/tweetImage";
 
-export const TweetForm = () => {
+export const TweetForm = ({ setTotalCount }) => {
   const { flashMessage, createFlashMessage } = useContext(FlashMessageContext);
   const [imageId, setImageId] = useState("");
   const [text, setText] = useState("");
@@ -40,6 +40,7 @@ export const TweetForm = () => {
     try {
       await createTweet(tweetParams);
       createFlashMessage(["ツイートしました"], "success", true);
+      setTotalCount(prevTotalCount => prevTotalCount + 1);
       setText("");
       setImageId("");
     } catch (e) {
