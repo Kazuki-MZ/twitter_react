@@ -1,15 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
+
 import { Card, CardBody, Col, Image, Nav, Row } from "react-bootstrap";
 
+//React icon
 import { BiMessage } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FaRetweet } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+
+//FlashMessageをリセットするための関数
+import { FlashMessageContext } from "../context/FlashMessageContext";
 
 export const TweetCard = ({ tweet }) => {
+  const { resetFlashMessage } = useContext(FlashMessageContext);
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    resetFlashMessage();
+    navigate(`/tweets/${tweet.id}`);
+  };
+
   return (
-    <Card>
+    <Card onClick={handleCardClick}>
       <CardBody>
         <Row>
           <Col xs={1}>アイコン</Col>
@@ -24,6 +38,7 @@ export const TweetCard = ({ tweet }) => {
                 </p>
               </Col>
             </Row>
+
             <h4>{tweet.text}</h4>
             {tweet.imageUrl ? (
               <Image src={tweet.imageUrl} width='40%' fluid alt='tweet_image' />
@@ -65,5 +80,6 @@ export const TweetCard = ({ tweet }) => {
         </Row>
       </CardBody>
     </Card>
+    // </Link>
   );
 };
