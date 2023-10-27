@@ -7,17 +7,17 @@ export const PageNation = () => {
     useContext(TweetsContext);
 
   const maxRecordsPerPage = 5;
-  //最後のページ開始のoffsetを計算。これは全ページ数を計算し、最大表示数をかけてる。
+  //最後のページにプラス1ページした開始のoffsetを計算。これは全ページ数を計算し、最大表示数をかけてる。
   const paginationMaxOffset =
     Math.ceil(totalCount / maxRecordsPerPage) * maxRecordsPerPage;
 
   const handlePageClickPrev = () => {
     if (currentOffset === 0) return;
-    setCurrentOffset(prevOffset => prevOffset - 5);
+    setCurrentOffset(prevOffset => prevOffset - maxRecordsPerPage);
   };
 
   const handlePageClickNext = () => {
-    let offset = currentOffset + 5;
+    let offset = currentOffset + maxRecordsPerPage;
     if (offset >= paginationMaxOffset) return;
     setCurrentOffset(offset);
   };
@@ -27,7 +27,7 @@ export const PageNation = () => {
   };
 
   const handlePageClickLast = () => {
-    setCurrentOffset(paginationMaxOffset - 5);
+    setCurrentOffset(paginationMaxOffset - maxRecordsPerPage);
   };
 
   return (
