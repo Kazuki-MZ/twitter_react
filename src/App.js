@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SignIn from "./components/SignIn";
 import { Home } from "./components/Home";
 import { FlashMessageProvider } from "./context/FlashMessageContext";
+import TweetDetail from "./components/TweetDetail";
+import { Layout } from "./pages/Layout";
 
 function App() {
   return (
@@ -14,7 +16,11 @@ function App() {
           <Routes>
             <Route path='/api/v1/users' element={<SignUp />} />
             <Route path='/api/v1/users/sign_in' element={<SignIn />} />
-            <Route path='/' element={<Home />} />
+
+            <Route path='/' element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path='/tweets/:id' element={<TweetDetail />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </FlashMessageProvider>
