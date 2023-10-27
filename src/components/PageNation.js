@@ -6,11 +6,14 @@ export const PageNation = () => {
   const { totalCount, currentOffset, setCurrentOffset } =
     useContext(TweetsContext);
 
-  const paginationMaxOffset = Math.ceil(totalCount / 5) * 5;
+  const maxRecordsPerPage = 5;
+  //最後のページ開始のoffsetを計算。これは全ページ数を計算し、最大表示数をかけてる。
+  const paginationMaxOffset =
+    Math.ceil(totalCount / maxRecordsPerPage) * maxRecordsPerPage;
 
   const handlePageClickPrev = () => {
     if (currentOffset === 0) return;
-    setCurrentOffset(currentOffset - 5);
+    setCurrentOffset(prevOffset => prevOffset - 5);
   };
 
   const handlePageClickNext = () => {
