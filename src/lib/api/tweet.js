@@ -25,3 +25,14 @@ export const getAllTweets = offset => {
     },
   });
 };
+
+//ツイート詳細
+export const getDetailTweet = id => {
+  return client.get(`/api/v1/tweets/${id}`, {
+    headers: {
+      "access-token": Cookies.get("_access_token"),
+      client: Cookies.get("_client"),
+      uid: Cookies.get("_uid"),
+    },
+  });
+};

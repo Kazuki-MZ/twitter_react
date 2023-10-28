@@ -1,9 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { Sidebar } from "./Sidebar";
 import { TweetForm } from "./TweetForm";
 import { TweetList } from "./TweetList";
 import { getAllTweets } from "../lib/api/tweet";
@@ -29,34 +27,27 @@ export const Home = () => {
   }, [currentOffset, totalCount]);
 
   return (
-    <Container fluid>
-      <Row className='vh-100'>
-        <Col xs lg='2' className='border-end'>
-          <Sidebar />
+    <>
+      <Row style={{ display: "flex" }}>
+        <Col xs={12} className='border-bottom'>
+          <h3>HOME</h3>
         </Col>
-        <Col xs={10}>
-          <Row style={{ display: "flex" }}>
-            <Col xs={12} className='border-bottom'>
-              <h3>HOME</h3>
-            </Col>
-            <Col>
-              <TweetForm setTotalCount={setTotalCount} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <TweetsContext.Provider
-                value={{
-                  totalCount,
-                  currentOffset,
-                  setCurrentOffset,
-                }}>
-                <TweetList tweets={tweets} />
-              </TweetsContext.Provider>
-            </Col>
-          </Row>
+        <Col>
+          <TweetForm setTotalCount={setTotalCount} />
         </Col>
       </Row>
-    </Container>
+      <Row>
+        <Col>
+          <TweetsContext.Provider
+            value={{
+              totalCount,
+              currentOffset,
+              setCurrentOffset,
+            }}>
+            <TweetList tweets={tweets} />
+          </TweetsContext.Provider>
+        </Col>
+      </Row>
+    </>
   );
 };
