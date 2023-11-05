@@ -1,11 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Pagination } from "react-bootstrap";
-import { TweetsContext } from "./Home";
 
-export const PageNation = () => {
-  const { totalCount, currentOffset, setCurrentOffset } =
-    useContext(TweetsContext);
-
+export const PageNation = ({ totalCount, currentOffset, setCurrentOffset }) => {
   const maxRecordsPerPage = 5;
   //最後のページにプラス1ページした開始のoffsetを計算。これは全ページ数を計算し、最大表示数をかけてる。
   const paginationMaxOffset =
