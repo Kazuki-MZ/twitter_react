@@ -7,6 +7,7 @@ import { Home } from "./components/Home";
 import { FlashMessageProvider } from "./context/FlashMessageContext";
 import TweetDetail from "./components/TweetDetail";
 import { Layout } from "./pages/Layout";
+import { Profile } from "./components/Profile";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path='/' element={<Layout />}>
               <Route index element={<Home />} />
               <Route path='/tweets/:id' element={<TweetDetail />} />
+              <Route path='/profile/users/:userId' element={<Profile />} />
             </Route>
           </Routes>
         </BrowserRouter>
