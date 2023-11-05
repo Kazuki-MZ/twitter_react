@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from "react";
-import { Button, Col, Form, FormGroup, Row } from "react-bootstrap";
+import { Button, Col, Form, FormGroup, Image, Row } from "react-bootstrap";
 
 import { CgImage } from "react-icons/cg";
 import { FlashMessageContext } from "../context/FlashMessageContext";
@@ -7,7 +7,10 @@ import { createTweet } from "../lib/api/tweet";
 import FlashMessage from "./FlashMessage";
 import { createImage } from "../lib/api/tweetImage";
 
-export const TweetForm = ({ setTotalCount }) => {
+//デフォルトのユーザーアイコン
+import Icon from "../images/default_icon.jpeg";
+
+export const TweetForm = ({ setTotalCount, currentUser }) => {
   const { flashMessage, createFlashMessage } = useContext(FlashMessageContext);
   const [imageId, setImageId] = useState("");
   const [text, setText] = useState("");
@@ -57,7 +60,16 @@ export const TweetForm = ({ setTotalCount }) => {
           display: "flex",
           justifyContent: "center",
         }}>
-        アイコン
+        <Image
+          src={
+            currentUser?.profile?.iconImageUrl
+              ? currentUser.profile.iconImageUrl
+              : Icon
+          }
+          width='80vw'
+          height='80vw'
+          alt='icon_image'
+        />
       </Col>
       <Col xs={11}>
         <Form>

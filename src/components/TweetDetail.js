@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { getDetailTweet } from "../lib/api/tweet";
 import { Col, Row, Image, Nav } from "react-bootstrap";
+
+import Icon from "../images/default_icon.jpeg";
 
 //icon
 import { BiMessage } from "react-icons/bi";
@@ -13,7 +15,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 const TweetDetail = () => {
   let { id } = useParams("");
   const [tweet, setTweet] = useState({});
-  const arrowClick = useRef();
+  let navigate = useNavigate();
 
   useEffect(() => {
     const fetchTweets = async () => {
@@ -27,8 +29,8 @@ const TweetDetail = () => {
     fetchTweets();
   }, [id]);
 
-  const movementHomePage = () => {
-    arrowClick.current.click();
+  const movementBackPage = () => {
+    navigate(-1);
   };
 
   return (
@@ -38,19 +40,26 @@ const TweetDetail = () => {
           <Col>
             <FaArrowLeftLong
               style={{ fontSize: "2vw" }}
-              onClick={movementHomePage}
+              onClick={movementBackPage}
             />
-            <Link hidden ref={arrowClick} to='/'></Link>
           </Col>
           <Col>
             <h3>Post</h3>
           </Col>
         </Row>
 
-        <Col xs={1}>アイコン</Col>
-        <Col xs={11}>
-          {tweet.user ? (
-            <>
+        {tweet.user?.profile ? (
+          <>
+            <Col xs={1}>
+              <Image
+                src={tweet.user.profile.iconImageUrl || Icon}
+                width='90vw'
+                height='90vw'
+                fluid
+                alt='tweet_image'
+              />
+            </Col>
+            <Col xs={11}>
               <h4>{tweet.user.name}</h4>
               <h4>{tweet.text}</h4>
               {tweet.imageUrl ? (
@@ -63,11 +72,15 @@ const TweetDetail = () => {
               ) : (
                 <div></div>
               )}
-            </>
-          ) : (
-            <h4>Loading</h4>
-          )}
+            </Col>
+          </>
+        ) : (
+          <>
+            <div>Loading</div>
+          </>
+        )}
 
+        <Col xs={11}>
           <Nav
             style={{
               display: "flex",
