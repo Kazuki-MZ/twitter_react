@@ -1,62 +1,32 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Button, Form, Image } from "react-bootstrap";
+import { useUploadFile } from "../hooks/useUploadFile";
 
 export const HeaderImageForm = ({ header, setHeader }) => {
   const fileInputRef = useRef();
 
-  useEffect(() => {
-    if (header.image) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setHeader(preveHeader => ({
-          ...preveHeader,
-          preview: reader.result,
-        }));
-      };
-      reader.readAsDataURL(header.image);
-    } else {
-      setHeader(preveHeader => ({
-        ...preveHeader,
-        preview: null,
-      }));
-    }
-  }, [header.image]);
+  const { file, checkFileExists, onClickNullFile } = useUploadFile({
+    file: header,
+    setFile: setHeader,
+  });
 
   return (
-    <Form.Group key='icon' className='mb-3'>
+    <Form.Group key='header' className='mb-3'>
       <Form.Label>ヘッダー</Form.Label>
       <Form.Control
         type='file'
         style={{ display: "none" }}
         ref={fileInputRef}
         accept='images/*'
-        onChange={e => {
-          const file = e.target.files[0];
-          if (file) {
-            setHeader(preveHeader => ({
-              ...preveHeader,
-              image: file,
-            }));
-          } else {
-            setHeader(preveHeader => ({
-              ...preveHeader,
-              image: null,
-            }));
-          }
-        }}
+        onChange={checkFileExists}
       />
-      {header.preview ? (
+      {file.preview ? (
         <Image
           src={header.preview}
           width='130vw'
           height='70vw'
-          alt='画像プレビュー'
-          onClick={() =>
-            setHeader(preveHeader => ({
-              ...preveHeader,
-              image: null,
-            }))
-          }
+          alt='ヘッダー画像プレビュー'
+          onClick={onClickNullFile}
         />
       ) : (
         <Button

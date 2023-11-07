@@ -1,26 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Button, Form, Image } from "react-bootstrap";
+import { useUploadFile } from "../hooks/useUploadFile";
 
 export const IconImageForm = ({ icon, setIcon }) => {
   const fileInputRef = useRef();
 
-  useEffect(() => {
-    if (icon.image) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setIcon(preveIcon => ({
-          ...preveIcon,
-          preview: reader.result,
-        }));
-      };
-      reader.readAsDataURL(icon.image);
-    } else {
-      setIcon(preveIcon => ({
-        ...preveIcon,
-        preview: "",
-      }));
-    }
-  }, [icon.image]);
+  const { file, checkFileExists, onClickNullFile } = useUploadFile({
+    file: icon,
+    setFile: setIcon,
+  });
 
   return (
     <Form.Group key='icon' className='mb-3'>
@@ -30,33 +18,15 @@ export const IconImageForm = ({ icon, setIcon }) => {
         style={{ display: "none" }}
         ref={fileInputRef}
         accept='images/*'
-        onChange={e => {
-          const file = e.target.files[0];
-          if (file) {
-            setIcon(preveIcon => ({
-              ...preveIcon,
-              image: file,
-            }));
-          } else {
-            setIcon(preveIcon => ({
-              ...preveIcon,
-              image: "",
-            }));
-          }
-        }}
+        onChange={checkFileExists}
       />
-      {icon.preview ? (
+      {file.preview ? (
         <Image
           src={icon.preview}
           width='70vw'
           height='70vw'
-          alt='画像プレビュー'
-          onClick={() =>
-            setIcon(preveIcon => ({
-              ...preveIcon,
-              image: null,
-            }))
-          }
+          alt='アイコン画像プレビュー'
+          onClick={onClickNullFile}
         />
       ) : (
         <Button
