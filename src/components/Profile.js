@@ -67,13 +67,7 @@ export const Profile = () => {
     return (
       <div
         style={{ marginTop: "20px", marginBottom: "20px", fontSize: "1.7vw" }}>
-        {icon ? (
-          <>
-            <i>{icon}</i>
-          </>
-        ) : (
-          <div></div>
-        )}
+        {icon && <i>{icon}</i>}
         <span style={{ marginLeft: "10px" }}>{text}</span>
       </div>
     );
