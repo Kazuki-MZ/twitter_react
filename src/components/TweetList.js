@@ -1,7 +1,12 @@
 import { TweetCard } from "./TweetCard";
 import { PageNation } from "./PageNation";
 
-export const TweetList = ({ tweets }) => {
+export const TweetList = ({
+  tweets,
+  totalCount,
+  currentOffset,
+  setCurrentOffset,
+}) => {
   return (
     <>
       {tweets.map(tweet => (
@@ -9,7 +14,11 @@ export const TweetList = ({ tweets }) => {
           <TweetCard tweet={tweet} />
         </div>
       ))}
-      <PageNation />
+      <PageNation
+        totalCount={totalCount}
+        currentOffset={currentOffset}
+        setCurrentOffset={setCurrentOffset}
+      />
     </>
   );
 };

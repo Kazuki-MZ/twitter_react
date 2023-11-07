@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import { Card, CardBody, Col, Image, Nav, Row } from "react-bootstrap";
+import Icon from "../images/default_icon.jpeg";
 
 //React icon
 import { BiMessage } from "react-icons/bi";
@@ -26,7 +27,14 @@ export const TweetCard = ({ tweet }) => {
     <Card onClick={handleCardClick}>
       <CardBody>
         <Row>
-          <Col xs={1}>アイコン</Col>
+          <Col xs={1}>
+            <Image
+              src={tweet.user.profile?.iconImageUrl || Icon}
+              width='70vw'
+              height='70vw'
+              alt='tweet_image'
+            />
+          </Col>
           <Col xs={11}>
             <Row xs='auto'>
               <Col>
