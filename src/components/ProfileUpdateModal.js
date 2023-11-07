@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -6,14 +6,9 @@ import { IconImageForm } from "./IconImageForm";
 import { HeaderImageForm } from "./HeaderImage";
 import FlashMessage from "./FlashMessage";
 import { useSetProfileModal } from "../hooks/useSetProfileModal";
+import { FlashMessageContext } from "../context/FlashMessageContext";
 
-export const ProfileUpdateModal = ({
-  onHide,
-  profileInfo,
-  show,
-  flashMessage,
-  createFlashMessage,
-}) => {
+export const ProfileUpdateModal = ({ onHide, profileInfo, show }) => {
   const {
     onChangeProfile,
     handleProfileSubmit,
@@ -25,8 +20,10 @@ export const ProfileUpdateModal = ({
   } = useSetProfileModal({
     onHide,
     profileInfo,
-    createFlashMessage,
   });
+
+  //フラッシュメッセージ
+  const { flashMessage } = useContext(FlashMessageContext);
 
   return (
     <Modal

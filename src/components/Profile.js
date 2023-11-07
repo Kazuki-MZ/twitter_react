@@ -53,9 +53,8 @@ export const Profile = () => {
     fetchUserInfo();
   }, [userId, currentOffset, modalShow]);
 
-  //フラッシュメッセージ
-  const { flashMessage, createFlashMessage, resetFlashMessage } =
-    useContext(FlashMessageContext);
+  //フラッシュメッセージをリセットする
+  const { resetFlashMessage } = useContext(FlashMessageContext);
 
   const navigate = useNavigate();
   const movementHome = () => {
@@ -120,11 +119,9 @@ export const Profile = () => {
               show={modalShow}
               onHide={() => {
                 setModalShow(false);
-                resetFlashMessage();
+                resetFlashMessage(); //モーダルが閉じた時にフラッシュメッセージを非表示にする
               }}
               profileInfo={userInfo.profile}
-              flashMessage={flashMessage}
-              createFlashMessage={createFlashMessage}
             />
           </Col>
         </Row>
