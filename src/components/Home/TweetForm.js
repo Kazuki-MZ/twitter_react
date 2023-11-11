@@ -1,17 +1,24 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Col, Form, FormGroup, Image, Row } from "react-bootstrap";
 
 import { CgImage } from "react-icons/cg";
-import { FlashMessageContext } from "../context/FlashMessageContext";
-import { createTweet } from "../lib/api/tweet";
-import FlashMessage from "./FlashMessage";
-import { createImage } from "../lib/api/tweetImage";
+import { createTweet } from "../../lib/api/tweet";
+import FlashMessage from "../FlashMessage/FlashMessage";
+import { createImage } from "../../lib/api/tweetImage";
 
 //デフォルトのユーザーアイコン
-import Icon from "../images/default_icon.jpeg";
+import Icon from "../../images/default_icon.jpeg";
+import { loginUserState } from "../../Atoms/user/LoginUserState";
+import { useRecoilValue } from "recoil";
+import { useFlashMessage } from "../../hooks/useFlashMessage";
+import { flashMessageState } from "../../Atoms/flashmessage/FlashMessageState";
 
-export const TweetForm = ({ setTotalCount, currentUser }) => {
-  const { flashMessage, createFlashMessage } = useContext(FlashMessageContext);
+export const TweetForm = ({ setTotalCount }) => {
+  const { createFlashMessage } = useFlashMessage();
+  const flashMessage = useRecoilValue(flashMessageState);
+
+  const loginUser = useRecoilValue(loginUserState);
+
   const [imageId, setImageId] = useState("");
   const [text, setText] = useState("");
 
@@ -62,8 +69,8 @@ export const TweetForm = ({ setTotalCount, currentUser }) => {
         }}>
         <Image
           src={
-            currentUser?.profile?.iconImageUrl
-              ? currentUser.profile.iconImageUrl
+            loginUser?.profile?.iconImageUrl
+              ? loginUser.profile.iconImageUrl
               : Icon
           }
           width='80vw'

@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "../components/Sidebar";
+import { Sidebar } from "../components/Home/Sidebar";
 
 export const Layout = () => {
   return (

@@ -1,18 +1,22 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useState } from "react";
-import { signIn } from "../lib/api/auth";
+import { signIn } from "../../lib/api/auth";
 import Card from "react-bootstrap/Card";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import FlashMessage from "./FlashMessage";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { FlashMessageContext } from "../context/FlashMessageContext";
+
+//フラッシュメッセージ表示
+import { flashMessageState } from "../../Atoms/flashmessage/FlashMessageState";
+import { useFlashMessage } from "../../hooks/useFlashMessage";
+import { useRecoilValue } from "recoil";
+import FlashMessage from "../FlashMessage/FlashMessage";
 
 const SignIn = () => {
-  const { flashMessage, createFlashMessage, resetFlashMessage } =
-    useContext(FlashMessageContext);
+  const { createFlashMessage, resetFlashMessage } = useFlashMessage();
+  const flashMessage = useRecoilValue(flashMessageState);
 
   const [session, setSession] = useState({
     email: "",

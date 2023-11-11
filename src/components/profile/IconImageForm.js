@@ -1,18 +1,18 @@
 import React, { useRef } from "react";
 import { Button, Form, Image } from "react-bootstrap";
-import { useUploadFile } from "../hooks/useUploadFile";
+import { useUploadFile } from "../../hooks/useUploadFile";
 
-export const HeaderImageForm = ({ header, setHeader }) => {
+export const IconImageForm = ({ icon, setIcon }) => {
   const fileInputRef = useRef();
 
   const { file, checkFileExists, onClickNullFile } = useUploadFile({
-    file: header,
-    setFile: setHeader,
+    file: icon,
+    setFile: setIcon,
   });
 
   return (
-    <Form.Group key='header' className='mb-3'>
-      <Form.Label>ヘッダー</Form.Label>
+    <Form.Group key='icon' className='mb-3'>
+      <Form.Label>アイコン</Form.Label>
       <Form.Control
         type='file'
         style={{ display: "none" }}
@@ -22,10 +22,10 @@ export const HeaderImageForm = ({ header, setHeader }) => {
       />
       {file.preview ? (
         <Image
-          src={header.preview}
-          width='130vw'
+          src={icon.preview}
+          width='70vw'
           height='70vw'
-          alt='ヘッダー画像プレビュー'
+          alt='アイコン画像プレビュー'
           onClick={onClickNullFile}
         />
       ) : (
@@ -35,7 +35,7 @@ export const HeaderImageForm = ({ header, setHeader }) => {
             e.preventDefault();
             fileInputRef.current.click();
           }}>
-          Edit Header
+          Edit Icon
         </Button>
       )}
     </Form.Group>

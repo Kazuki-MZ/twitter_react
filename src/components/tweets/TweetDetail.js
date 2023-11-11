@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getDetailTweet } from "../lib/api/tweet";
+import { getDetailTweet } from "../../lib/api/tweet";
 import { Col, Row, Image, Nav } from "react-bootstrap";
 
-import Icon from "../images/default_icon.jpeg";
+import Icon from "../../images/default_icon.jpeg";
 
 //icon
 import { BiMessage } from "react-icons/bi";
