@@ -3,9 +3,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import { TweetForm } from "./TweetForm";
-import { TweetList } from "./TweetList";
-import { getAllTweets } from "../lib/api/tweet";
-import { getCurrentUser } from "../lib/api/auth";
+import { TweetList } from "../tweets/TweetList";
+import { getAllTweets } from "../../lib/api/tweet";
+import { useLoginUser } from "../../hooks/useLoginUser";
 
 export const TweetsContext = createContext();
 
@@ -13,20 +13,9 @@ export const Home = () => {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [tweets, setTweets] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentUser, setCurrentUser] = useState("");
 
-  //ログインユーザーを取得
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const res = await getCurrentUser();
-        setCurrentUser(res.data.currentUser);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchCurrentUser();
-  }, []);
+  //ログイン成功後、ホーム画面描写時ログインユーザーをセットする
+  useLoginUser();
 
   //全てのツイートと、ページネーションに必要な値を取得
   useEffect(() => {
@@ -40,7 +29,7 @@ export const Home = () => {
       }
     };
     fetchTweets();
-  }, [currentOffset, totalCount]);
+  }, [currentOffset]);
 
   return (
     <>
@@ -49,7 +38,7 @@ export const Home = () => {
           <h3>HOME</h3>
         </Col>
         <Col>
-          <TweetForm setTotalCount={setTotalCount} currentUser={currentUser} />
+          <TweetForm tweets={tweets} setTweets={setTweets} />
         </Col>
       </Row>
       <Row>
@@ -57,8 +46,10 @@ export const Home = () => {
           <TweetsContext.Provider
             value={{
               totalCount,
+              setTotalCount,
               currentOffset,
               setCurrentOffset,
+              tweets,
             }}>
             <TweetList
               tweets={tweets}

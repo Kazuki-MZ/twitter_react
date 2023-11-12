@@ -1,17 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useState } from "react";
-import { signUp } from "../lib/api/auth";
+import { signUp } from "../../lib/api/auth";
 import Card from "react-bootstrap/Card";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import FlashMessage from "./FlashMessage";
 import { Link } from "react-router-dom";
-import { FlashMessageContext } from "../context/FlashMessageContext";
+
+//フラッシュメッセージ
+import { useRecoilValue } from "recoil";
+import { flashMessageState } from "../../Atoms/flashmessage/FlashMessageState";
+import { useFlashMessage } from "../../hooks/useFlashMessage";
+import FlashMessage from "../FlashMessage/FlashMessage";
 
 const SignUp = () => {
-  const { flashMessage, createFlashMessage, resetFlashMessage } =
-    useContext(FlashMessageContext);
+  const { createFlashMessage, resetFlashMessage } = useFlashMessage();
+  const flashMessage = useRecoilValue(flashMessageState);
 
   const [registration, setRegistration] = useState({
     name: "",

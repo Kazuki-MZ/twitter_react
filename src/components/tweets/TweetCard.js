@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import { Card, CardBody, Col, Image, Nav, Row } from "react-bootstrap";
-import Icon from "../images/default_icon.jpeg";
+import { Button, Card, CardBody, Col, Image, Nav, Row } from "react-bootstrap";
+import Icon from "../../images/default_icon.jpeg";
 
 //React icon
 import { BiMessage } from "react-icons/bi";
@@ -9,13 +9,18 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { FaRetweet } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 //FlashMessageをリセットするための関数
-import { FlashMessageContext } from "../context/FlashMessageContext";
+import { useFlashMessage } from "../../hooks/useFlashMessage.js";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loginUserState } from "../../Atoms/user/LoginUserState.js";
+import { deleteTweet } from "../../lib/api/tweet.js";
+import { loginUserTweetsState } from "../../Atoms/tweets/loginUserTweetsState.js";
 
 export const TweetCard = ({ tweet }) => {
-  const { resetFlashMessage } = useContext(FlashMessageContext);
+  const { resetFlashMessage } = useFlashMessage();
+
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -23,8 +28,40 @@ export const TweetCard = ({ tweet }) => {
     navigate(`/tweets/${tweet.id}`);
   };
 
+  const [loginUserTweets, setLoginUserTweets] =
+    useRecoilState(loginUserTweetsState);
+
+  const deleteLoginUserTweet = async tweetId => {
+    if (window.confirm("ツイートを削除しますか？")) {
+      try {
+        await deleteTweet(tweetId);
+        setLoginUserTweets(
+          loginUserTweets.filter(tweet => tweet.id !== tweetId)
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  // ログインユーザーのプロフィール画面のみ削除ボタンを表示
+  const location = useLocation();
+  const loginUser = useRecoilValue(loginUserState);
+
+  const deleteTweetButton = loginUser => {
+    const pathname = location.pathname;
+    if (pathname !== `/profile/users/${loginUser.id}`) return null;
+    return (
+      <Button
+        className='btn btn-secondary'
+        onClick={() => deleteLoginUserTweet(tweet.id)}>
+        削除
+      </Button>
+    );
+  };
+
   return (
-    <Card onClick={handleCardClick}>
+    <Card>
       <CardBody>
         <Row>
           <Col xs={1}>
@@ -45,9 +82,10 @@ export const TweetCard = ({ tweet }) => {
                   {moment(tweet.createdAt).format("YYYY-MM-DD")}
                 </p>
               </Col>
+              <Col className='ms-auto'>{deleteTweetButton(loginUser)}</Col>
             </Row>
 
-            <h4>{tweet.text}</h4>
+            <h4 onClick={handleCardClick}>{tweet.text}</h4>
             {tweet.imageUrl ? (
               <Image src={tweet.imageUrl} width='40%' fluid alt='tweet_image' />
             ) : (
@@ -88,6 +126,5 @@ export const TweetCard = ({ tweet }) => {
         </Row>
       </CardBody>
     </Card>
-    // </Link>
   );
 };

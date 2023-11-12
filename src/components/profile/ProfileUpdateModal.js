@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { IconImageForm } from "./IconImageForm";
 import { HeaderImageForm } from "./HeaderImage";
-import FlashMessage from "./FlashMessage";
-import { useSetProfileModal } from "../hooks/useSetProfileModal";
-import { FlashMessageContext } from "../context/FlashMessageContext";
+import FlashMessage from "../FlashMessage/FlashMessage";
+import { useSetProfileModal } from "../../hooks/useSetProfileModal";
+import { useRecoilValue } from "recoil";
+import { flashMessageState } from "../../Atoms/flashmessage/FlashMessageState";
 
 export const ProfileUpdateModal = ({ onHide, profileInfo, show }) => {
   const {
@@ -23,7 +24,7 @@ export const ProfileUpdateModal = ({ onHide, profileInfo, show }) => {
   });
 
   //フラッシュメッセージ
-  const { flashMessage } = useContext(FlashMessageContext);
+  const flashMessage = useRecoilValue(flashMessageState);
 
   return (
     <Modal

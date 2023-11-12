@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Nav } from "react-bootstrap";
 //icon
 import { FaSquareXTwitter } from "react-icons/fa6";
@@ -10,27 +10,16 @@ import { GrBookmark } from "react-icons/gr";
 import { BsPersonFill } from "react-icons/bs";
 
 import { useNavigate } from "react-router-dom";
-import { getCurrentUser } from "../lib/api/auth";
+import { useRecoilValue } from "recoil";
+import { loginUserState } from "../../Atoms/user/LoginUserState";
 
 export const Sidebar = () => {
-  //サイドバーをクリックした時はログインユーザーの情報を表示したいので、ログインユーザーのidを渡す
-  const [currentUserId, setCurrentUserId] = useState("");
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const res = await getCurrentUser();
-        setCurrentUserId(res.data.currentUser.id);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchCurrentUser();
-  }, []);
+  //サイドバーをクリックした時はログインユーザーの情報を表示したいので、ログインユーザーを取得
+  const loginUser = useRecoilValue(loginUserState);
 
   const navigate = useNavigate();
   const movementCurrentUserProfile = () => {
-    navigate(`/profile/users/${currentUserId}`);
+    navigate(`/profile/users/${loginUser.id}`);
   };
 
   const movementHome = () => {

@@ -1,9 +1,9 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { updateProfile } from "../lib/api/profile";
-import { FlashMessageContext } from "../context/FlashMessageContext";
+import { useFlashMessage } from "./useFlashMessage";
 
 export const useSetProfileModal = ({ profileInfo, onHide }) => {
-  const { createFlashMessage } = useContext(FlashMessageContext);
+  const { createFlashMessage } = useFlashMessage();
   const [icon, setIcon] = useState({
     image: "",
     preview: "",

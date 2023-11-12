@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Image, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -8,16 +8,18 @@ import { CgWebsite } from "react-icons/cg";
 import { SlCalender } from "react-icons/sl";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
-import { ProfileUpdateModal } from "./ProfileUpdateModal";
-import { TweetList } from "./TweetList";
-import { getUser } from "../lib/api/users";
-import { FlashMessageContext } from "../context/FlashMessageContext";
-
 //header画像
-import Header from "../images/default_header.jpg";
+import Header from "../../images/default_header.jpg";
 
 //icon画像
-import Icon from "../images/default_icon.jpeg";
+import Icon from "../../images/default_icon.jpeg";
+
+import { getUser } from "../../lib/api/users";
+import { TweetList } from "../tweets/TweetList";
+import { ProfileUpdateModal } from "./ProfileUpdateModal";
+import { useFlashMessage } from "../../hooks/useFlashMessage";
+import { useRecoilState } from "recoil";
+import { loginUserTweetsState } from "../../Atoms/tweets/loginUserTweetsState";
 
 export const Profile = () => {
   //ページネーションでツイートを表示するため、Offsetと合計値を作成
@@ -26,12 +28,15 @@ export const Profile = () => {
 
   const [modalShow, setModalShow] = useState(false);
 
+  //ログインユーザーのツイートの状態
+  const [loginUserTweets, setLoginUserTweets] =
+    useRecoilState(loginUserTweetsState);
+
   //idからユーザーデータを取得する（user情報、ユーザーに基づくツイート、プロフィール取得）
   let { userId } = useParams("");
 
   const [userInfo, setUserInfo] = useState({
     user: {},
-    tweets: [],
     profile: {},
   });
 
@@ -42,9 +47,9 @@ export const Profile = () => {
         setUserInfo(prevUserInfo => ({
           ...prevUserInfo,
           user: res.data.userInfo,
-          tweets: res.data.tweets,
           profile: res.data.profile,
         }));
+        setLoginUserTweets(res.data.tweets);
         setTotalCount(res.data.tweets.length);
       } catch (e) {
         console.log(e);
@@ -54,7 +59,7 @@ export const Profile = () => {
   }, [userId, currentOffset, modalShow]);
 
   //フラッシュメッセージをリセットする
-  const { resetFlashMessage } = useContext(FlashMessageContext);
+  const { resetFlashMessage } = useFlashMessage();
 
   const navigate = useNavigate();
   const movementHome = () => {
@@ -81,8 +86,8 @@ export const Profile = () => {
         <Col>
           <h3>{userInfo.profile.nickname}</h3>
           <p className='text-muted'>
-            {userInfo.tweets.length}
-            {userInfo.tweets.length > 1 ? "posts" : "post"}
+            {loginUserTweets.length}
+            {loginUserTweets.length > 1 ? "posts" : "post"}
           </p>
         </Col>
       </Row>
@@ -141,7 +146,7 @@ export const Profile = () => {
         </Col>
       </Row>
       <TweetList
-        tweets={userInfo.tweets}
+        tweets={loginUserTweets}
         totalCount={totalCount}
         currentOffset={currentOffset}
         setCurrentOffset={setCurrentOffset}

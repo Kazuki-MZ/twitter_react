@@ -1,18 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import SignUp from "./components/SignUp";
 import "bootstrap/dist/css/bootstrap.min.css";
-import SignIn from "./components/SignIn";
-import { Home } from "./components/Home";
-import { FlashMessageProvider } from "./context/FlashMessageContext";
-import TweetDetail from "./components/TweetDetail";
 import { Layout } from "./pages/Layout";
-import { Profile } from "./components/Profile";
+import { RecoilRoot } from "recoil";
+import { Home } from "./components/Home/Home";
+import SignUp from "./components/Authentication/SignUp";
+import SignIn from "./components/Authentication/SignIn";
+import TweetDetail from "./components/tweets/TweetDetail";
+import { Profile } from "./components/profile/Profile";
 
 function App() {
   return (
     <div>
-      <FlashMessageProvider>
+      <RecoilRoot>
         <BrowserRouter>
           <Routes>
             <Route path='/api/v1/users' element={<SignUp />} />
@@ -25,7 +25,7 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-      </FlashMessageProvider>
+      </RecoilRoot>
     </div>
   );
 }
