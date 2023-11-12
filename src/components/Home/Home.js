@@ -29,7 +29,7 @@ export const Home = () => {
       }
     };
     fetchTweets();
-  }, [currentOffset, totalCount]);
+  }, [currentOffset]);
 
   return (
     <>
@@ -38,7 +38,7 @@ export const Home = () => {
           <h3>HOME</h3>
         </Col>
         <Col>
-          <TweetForm setTotalCount={setTotalCount} />
+          <TweetForm tweets={tweets} setTweets={setTweets} />
         </Col>
       </Row>
       <Row>

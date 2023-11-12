@@ -13,7 +13,7 @@ import { useRecoilValue } from "recoil";
 import { useFlashMessage } from "../../hooks/useFlashMessage";
 import { flashMessageState } from "../../Atoms/flashmessage/FlashMessageState";
 
-export const TweetForm = ({ setTotalCount }) => {
+export const TweetForm = ({ tweets, setTweets }) => {
   const { createFlashMessage } = useFlashMessage();
   const flashMessage = useRecoilValue(flashMessageState);
 
@@ -48,9 +48,9 @@ export const TweetForm = ({ setTotalCount }) => {
   const handleTweetSubmit = async e => {
     e.preventDefault();
     try {
-      await createTweet(tweetParams);
+      const res = await createTweet(tweetParams);
       createFlashMessage(["ツイートしました"], "success", true);
-      setTotalCount(prevTotalCount => prevTotalCount + 1);
+      setTweets([res.data.tweet, ...tweets]);
       setText("");
       setImageId("");
     } catch (e) {
