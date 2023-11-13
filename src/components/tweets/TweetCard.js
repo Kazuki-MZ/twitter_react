@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Button, Card, CardBody, Col, Image, Nav, Row } from "react-bootstrap";
 import Icon from "../../images/default_icon.jpeg";
@@ -17,8 +17,13 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loginUserState } from "../../Atoms/user/LoginUserState.js";
 import { deleteTweet } from "../../lib/api/tweet.js";
 import { loginUserTweetsState } from "../../Atoms/tweets/loginUserTweetsState.js";
+import { CommentModal } from "./tweetNavItem/CommentModal.js";
 
 export const TweetCard = ({ tweet }) => {
+  //コメントモーダル
+  const [comment, setComment] = useState("");
+  const [modalShow, setModalShow] = useState(false);
+
   const { resetFlashMessage } = useFlashMessage();
 
   const navigate = useNavigate();
@@ -28,23 +33,10 @@ export const TweetCard = ({ tweet }) => {
     navigate(`/tweets/${tweet.id}`);
   };
 
+  // ログインユーザーのプロフィール画面のみ削除ボタンを表示
   const [loginUserTweets, setLoginUserTweets] =
     useRecoilState(loginUserTweetsState);
 
-  const deleteLoginUserTweet = async tweetId => {
-    if (window.confirm("ツイートを削除しますか？")) {
-      try {
-        await deleteTweet(tweetId);
-        setLoginUserTweets(
-          loginUserTweets.filter(tweet => tweet.id !== tweetId)
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
-
-  // ログインユーザーのプロフィール画面のみ削除ボタンを表示
   const location = useLocation();
   const loginUser = useRecoilValue(loginUserState);
 
@@ -58,6 +50,19 @@ export const TweetCard = ({ tweet }) => {
         削除
       </Button>
     );
+  };
+
+  const deleteLoginUserTweet = async tweetId => {
+    if (window.confirm("ツイートを削除しますか？")) {
+      try {
+        await deleteTweet(tweetId);
+        setLoginUserTweets(
+          loginUserTweets.filter(tweet => tweet.id !== tweetId)
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   return (
@@ -100,7 +105,17 @@ export const TweetCard = ({ tweet }) => {
               }}>
               <Nav.Item>
                 <Nav.Link>
-                  <BiMessage color='black' />
+                  <BiMessage color='black' onClick={() => setModalShow(true)} />
+                  <CommentModal
+                    show={modalShow}
+                    onHide={() => {
+                      setModalShow(false);
+                      setComment("");
+                    }}
+                    tweetInfo={tweet}
+                    comment={comment}
+                    setComment={setComment}
+                  />
                 </Nav.Link>
               </Nav.Item>
 
